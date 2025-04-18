@@ -79,7 +79,7 @@ class LoginScreen extends StatelessWidget {
                       height: getHeight(12),
                     ),
                     Text(
-                      "sign9".tr.toString().toUpperCase(),
+                      "Password".tr.toString().toUpperCase(),
                       style: kSize18W700ColorWhite,
                     ),
                     SizedBox(

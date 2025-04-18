@@ -1,9 +1,18 @@
+import 'dart:convert';
+import 'dart:io';
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:loved_app/utils/const.dart';
+import 'package:loved_app/utils/singleton.dart';
+import 'package:loved_app/view/dashboard_screen.dart';
 import 'package:loved_app/widgets/progress_bar.dart';
+
+import '../data/permissions.dart';
 import '../widgets/custom_toasts.dart';
 import 'general_controller.dart';
 
@@ -16,131 +25,76 @@ class HomeController extends GetxController {
   TextEditingController controller6 = TextEditingController();
   TextEditingController controller7 = TextEditingController();
 
-  CollectionReference users = FirebaseFirestore.instance.collection('users');
+  CollectionReference users = FirebaseFirestore.instance.collection('posts');
 
-  setPostPin() async {
+  Future<void> iAmLookingPin() async {
     Get.dialog(ProgressBar(), barrierDismissible: false);
-    DocumentReference docRef =
-        users.doc(FirebaseAuth.instance.currentUser!.uid);
+    final downloadUrl = await uploadImageToFirebaseStorage(
+        Get.find<GeneralController>().imageFile!);
+    if (downloadUrl != null) {
+      String randomString = generateRandomString(8);
+      final post = {
+        "name": controller1.text,
+        "chatRoomId":randomString,
+        "user_name": Get.find<GeneralController>().lovedBox.get(cUserName),
+        "last known address": controller2.text,
+        "last cell number": controller3.text,
+        "last known school": controller4.text,
+        "last known employer": controller5.text,
+        "last seen": controller6.text,
+        "identifying characteristics": controller7.text,
+        "lat": SingleToneValue.instance.currentLat,
+        "lng": SingleToneValue.instance.currentLng,
+        "dv_token": Get.find<GeneralController>().lovedBox.get(cDvToken),
+        'userId': FirebaseAuth
+            .instance.currentUser!.uid, // Replace with the actual user's ID
+        'timestamp': DateTime.now(),
+        'postType': 'looking',
+        "pic_person": downloadUrl,
+      };
+      // checkFirebaseDataIsEmpty(docRef, post);
+      setFireStoreData(post);
+    } else {
+      Get.back();
+      CustomToast.failToast(msg: 'Your picture is not correct');
+    }
 
-    Get.log("uid ${FirebaseAuth.instance.currentUser!.uid}");
+    // Check if Firebase data is empty, and initialize with a default list if necessary.
+  }
 
-    final docSnapshot = await docRef.get();
+  Future<String?> uploadImageToFirebaseStorage(File imageFile) async {
+    try {
+      final imgName = imageFile.path.split("/").last;
+      Get.log("imgname $imgName");
+      final ref = FirebaseStorage.instance.ref('images/$imgName');
+      Get.log("ref $ref");
 
-    docRef
-        .collection("i am looking post")
-        .doc(FirebaseAuth.instance.currentUser!.uid)
-        .update({
-      "post_list": FieldValue.arrayUnion([
-        {
-          "name": controller1.text,
-          "last known address": controller2.text,
-          "last cell number": controller3.text,
-          "last known school": controller4.text,
-          "last known employer": controller5.text,
-          "last seen": controller6.text,
-          "identifying characteristics": controller7.text,
-          "pic_person": "",
-        }
-      ]),
-    }).whenComplete(() {
+      final task = ref.putFile(imageFile);
+      await task.whenComplete(() {});
+      return await task.snapshot.ref.getDownloadURL();
+    } catch (error) {
+      // Handle errors gracefully, e.g., throw custom exceptions or show specific error messages.
+      Get.log("Failed to upload image: $error");
+      CustomToast.failToast(msg: "Failed to upload image: $error");
+      return null;
+    }
+  }
+
+  void setFireStoreData(Map<String, dynamic> data) {
+    users.add(data).then((_) {
       cleanControllers();
       Get.back();
-    }).catchError((error) {
-      // Get.back();
-      Get.log("Failed to add data: $error");
+      Get.to(() => const DashBoardScreen(),
+          transition: Transition.noTransition);
 
+      CustomToast.successToast(msg: "Post Successfully Placed");
+    }).catchError((error) {
+      Get.log("Failed to add data: $error");
       CustomToast.failToast(msg: "Failed to add data: $error");
     });
   }
 
-  setPostPinWithPic() async {
-    // Create a reference to the file you want to upload.
-    // final file = File('path/to/file');
-    Get.dialog(ProgressBar(), barrierDismissible: false);
-
-    final ref = FirebaseStorage.instance.ref('images/my_file.jpg');
-
-    // Create a `UploadTask` object and start the upload.
-    final task = ref.putFile(Get.find<GeneralController>().imageFile!);
-
-    // Wait for the upload to complete.
-    task.whenComplete(() async {
-      // Get the download URL of the uploaded file.
-      final downloadUrl = task.snapshot.ref.getDownloadURL();
-      DocumentReference docRef =
-          users.doc(FirebaseAuth.instance.currentUser!.uid);
-
-      final docSnapshot = await docRef.get();
-      // if (docSnapshot.exists) {
-      // await deleteGunPostDataInFirebase();
-      docRef
-          .collection("i am looking post")
-          .doc(FirebaseAuth.instance.currentUser!.uid)
-          .update({
-        "post_list": FieldValue.arrayUnion([
-          {
-            {
-              "name": controller1.text,
-              "last known address": controller2.text,
-              "last cell number": controller3.text,
-              "last known school": controller4.text,
-              "last known employer": controller5.text,
-              "last seen": controller6.text,
-              "identifying characteristics": controller7.text,
-              "pic_person": "$downloadUrl",
-            }
-          }
-        ]),
-      }).whenComplete(() {
-        cleanControllers();
-        Get.back();
-      }).catchError((error) {
-        // Get.back();
-        Get.log("Failed to add data: $error");
-
-        CustomToast.failToast(msg: "Failed to add data: $error");
-      });
-      // } else {
-      //   docRef
-      //       .collection("i am looking post")
-      //       .doc(FirebaseAuth.instance.currentUser!.uid)
-      //       .set({
-      //     "name": "",
-      //     "last known address": "",
-      //     "last cell number": "",
-      //     "last known school": "",
-      //     "last known employer": "",
-      //     "last seen": "",
-      //     "identifying characteristics": "",
-      //     "pic_person": "",
-      //   }, SetOptions(merge: true)).whenComplete(() {
-      //     cleanControllers();
-      //     Get.back();
-      //   }).catchError((error) {
-      //     // Get.back();
-      //     Get.log("Failed to add data: $error");
-      //
-      //     CustomToast.failToast(msg: "Failed to add data: $error");
-      //   });
-      // }
-    });
-  }
-
-  deleteLookingPostDataInFirebase() async {
-    CollectionReference collectionRef = users
-        .doc(FirebaseAuth.instance.currentUser!.uid)
-        .collection("i am looking post");
-
-    QuerySnapshot querySnapshot = await collectionRef.get();
-    List<DocumentSnapshot> documents = querySnapshot.docs;
-
-    for (DocumentSnapshot document in documents) {
-      await document.reference.delete();
-    }
-  }
-
-  cleanControllers() {
+  void cleanControllers() {
     controller1.clear();
     controller2.clear();
     controller3.clear();
@@ -148,5 +102,14 @@ class HomeController extends GetxController {
     controller5.clear();
     controller6.clear();
     controller7.clear();
+    Get.find<GeneralController>().imageFile = null;
+    Get.find<GeneralController>().image = null;
+  }
+
+  String generateRandomString(int length) {
+    const chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
+    final random = Random();
+    return List.generate(length, (index) => chars[random.nextInt(chars.length)]).join();
   }
 }
+

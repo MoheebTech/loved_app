@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:loved_app/utils/colors.dart';
+import 'package:loved_app/view/search_screen.dart';
 import 'package:loved_app/widgets/bottom_nav_bar.dart';
 
 
@@ -9,6 +10,7 @@ import '../utils/images.dart';
 import '../utils/size_config.dart';
 import '../utils/text_styles.dart';
 import '../widgets/custom_textfield.dart';
+import '../widgets/custom_toasts.dart';
 
 class HomeScreen extends StatelessWidget {
    const HomeScreen({super.key});
@@ -34,9 +36,19 @@ class HomeScreen extends StatelessWidget {
         )
         ,
         actions: [
-          Icon(Icons.search,color: white,size: getHeight(30),),
+          GestureDetector(
+            onTap: (){
+              Get.to(()=>SearchScreen(),transition: Transition.noTransition);
+            },
+              child: Icon(Icons.search,color: white,size: getHeight(30),)),
           SizedBox(width: getWidth(20),),
-          Icon(Icons.chat_rounded,color: white,size: getHeight(30),),
+          GestureDetector(
+
+              onTap: (){
+                CustomToast.successToast(msg: "This feature is coming soon!");
+
+              },
+              child: Icon(Icons.chat_rounded,color: white,size: getHeight(30),)),
           SizedBox(width: getWidth(20),),
 
         ],

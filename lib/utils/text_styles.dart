@@ -41,5 +41,19 @@ const kSize32W700ColorBlack =
 const kSize28W700ColorWhite =
     TextStyle(fontSize: 28, fontWeight: FontWeight.w700, color: white);
 
+const kSize20WhiteW400Text = TextStyle(
+    color: white,
+    fontWeight: FontWeight.w400,
+    fontSize: 20,
+);
 
+const kSize24W500ColorWhite =
+TextStyle(fontSize: 24, fontWeight: FontWeight.w500, color: white);
+
+const kSize16BlackW400Text = TextStyle(
+    color: black,
+    fontWeight: FontWeight.w400,
+    fontSize: 16,
+
+);
 
