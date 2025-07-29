@@ -1,4 +1,4 @@
-# loved_app
+# LovedApp
 
 A new Flutter project.
 

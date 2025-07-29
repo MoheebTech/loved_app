@@ -1,17 +1,13 @@
 import 'dart:developer';
 import 'dart:io';
-
 import 'package:flutter/material.dart';
-import 'package:loved_app/controllers/auth_controller.dart';
 import 'package:loved_app/data/permissions.dart';
 import 'package:loved_app/utils/firebase_functions.dart';
 import 'package:loved_app/utils/images.dart';
 import 'package:loved_app/utils/size_config.dart';
 import 'package:get/get.dart';
 import 'package:permission_handler/permission_handler.dart';
-
 import 'package:cached_network_image/cached_network_image.dart';
-
 import '../controllers/general_controller.dart';
 import '../utils/colors.dart';
 import '../utils/const.dart';

@@ -7,7 +7,6 @@ import '../utils/colors.dart';
 import '../utils/firebase_functions.dart';
 import '../utils/size_config.dart';
 import '../widgets/progress_bar.dart';
-
 class SearchScreen extends StatefulWidget {
   @override
   _SearchScreenState createState() => _SearchScreenState();

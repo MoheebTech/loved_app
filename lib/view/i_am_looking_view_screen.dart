@@ -85,8 +85,7 @@ class IAmLookingViewScreen extends StatelessWidget {
                       },
                       child: Container(
                         padding: const EdgeInsets.all(10),
-                        // height: getHeight(150),
-                        // width: getWidth(375),
+                      
                         decoration: BoxDecoration(
                             color: greyFont.withOpacity(0.1),
                             borderRadius: BorderRadius.circular(15)),
