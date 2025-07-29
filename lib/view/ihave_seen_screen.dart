@@ -1,26 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:loved_app/controllers/i_have_found_controller.dart';
 import 'package:loved_app/utils/size_config.dart';
 import 'package:get/get.dart';
-
+import 'dart:io';
+import 'package:permission_handler/permission_handler.dart';
 import '../controllers/general_controller.dart';
 import '../controllers/home_controller.dart';
+import '../data/permissions.dart';
 import '../utils/colors.dart';
 import '../utils/images.dart';
 import '../utils/text_styles.dart';
 import '../widgets/custom_textfield.dart';
+import '../widgets/custom_toasts.dart';
 
 class IHaveSeenScreen extends StatelessWidget {
   IHaveSeenScreen({super.key});
 
-  HomeController homeController = Get.find();
+  IHaveFoundSomeoneController homeController = Get.find();
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     int _selectedRadio = 0;
 
     return GestureDetector(
-      onTap: (){
+      onTap: () {
         FocusScope.of(context).unfocus();
       },
       child: Scaffold(
@@ -31,16 +35,13 @@ class IHaveSeenScreen extends StatelessWidget {
             flexibleSpace: Container(
               decoration: BoxDecoration(
                 gradient: LinearGradient(
-                  stops: [0.1,1.0],
+                  stops: [0.1, 1.0],
                   colors: [primaryColor.withOpacity(0.6), blue],
                   begin: Alignment.centerRight,
                   end: Alignment.centerLeft,
                 ),
               ),
-
-            )
-
-        ),
+            )),
         body: SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 15.0),
@@ -49,7 +50,6 @@ class IHaveSeenScreen extends StatelessWidget {
                 SizedBox(
                   height: getHeight(50),
                 ),
-
                 Container(
                   padding: EdgeInsets.symmetric(
                       horizontal: getWidth(10), vertical: getHeight(20)),
@@ -65,7 +65,8 @@ class IHaveSeenScreen extends StatelessWidget {
                         "Name".tr,
                         style: kSize16W500ColorBlack,
                       ),
-                      GetBuilder<HomeController>(builder: (context) {
+                      GetBuilder<IHaveFoundSomeoneController>(
+                          builder: (context) {
                         return CustomTextField(
                           backgroundColor: white,
                           height: getHeight(48),
@@ -74,14 +75,14 @@ class IHaveSeenScreen extends StatelessWidget {
                           controller: homeController.controller1,
                           keyboardType: TextInputType.emailAddress,
                           autovalidateMode:
-                          homeController.controller1.text.isNotEmpty
-                              ? AutovalidateMode.onUserInteraction
-                              : AutovalidateMode.disabled,
+                              homeController.controller1.text.isNotEmpty
+                                  ? AutovalidateMode.onUserInteraction
+                                  : AutovalidateMode.disabled,
                           onChanged: (value) {
                             homeController.update();
                           },
                           inputFormatters:
-                          FilteringTextInputFormatter.singleLineFormatter,
+                              FilteringTextInputFormatter.singleLineFormatter,
                         );
                       }),
                       SizedBox(
@@ -91,7 +92,8 @@ class IHaveSeenScreen extends StatelessWidget {
                         "Location".tr,
                         style: kSize16W500ColorBlack,
                       ),
-                      GetBuilder<HomeController>(builder: (context) {
+                      GetBuilder<IHaveFoundSomeoneController>(
+                          builder: (context) {
                         return CustomTextField(
                           backgroundColor: white,
                           height: getHeight(48),
@@ -101,42 +103,42 @@ class IHaveSeenScreen extends StatelessWidget {
                           controller: homeController.controller2,
                           keyboardType: TextInputType.emailAddress,
                           autovalidateMode:
-                          homeController.controller2.text.isNotEmpty
-                              ? AutovalidateMode.onUserInteraction
-                              : AutovalidateMode.disabled,
+                              homeController.controller2.text.isNotEmpty
+                                  ? AutovalidateMode.onUserInteraction
+                                  : AutovalidateMode.disabled,
                           onChanged: (value) {
                             homeController.update();
                           },
                           inputFormatters:
-                          FilteringTextInputFormatter.singleLineFormatter,
+                              FilteringTextInputFormatter.singleLineFormatter,
                         );
                       }),
                       SizedBox(
-
                         height: getHeight(15),
                       ),
                       Text(
                         "Age".tr,
                         style: kSize16W500ColorBlack,
                       ),
-                      GetBuilder<HomeController>(builder: (context) {
+                      GetBuilder<IHaveFoundSomeoneController>(
+                          builder: (context) {
                         return CustomTextField(
                           backgroundColor: white,
                           height: getHeight(48),
                           width: getWidth(Get.width),
                           text: "Age",
                           length: 500,
-                          controller: homeController.controller4,
+                          controller: homeController.controller3,
                           keyboardType: TextInputType.emailAddress,
                           autovalidateMode:
-                          homeController.controller4.text.isNotEmpty
-                              ? AutovalidateMode.onUserInteraction
-                              : AutovalidateMode.disabled,
+                              homeController.controller3.text.isNotEmpty
+                                  ? AutovalidateMode.onUserInteraction
+                                  : AutovalidateMode.disabled,
                           onChanged: (value) {
                             homeController.update();
                           },
                           inputFormatters:
-                          FilteringTextInputFormatter.singleLineFormatter,
+                              FilteringTextInputFormatter.singleLineFormatter,
                         );
                       }),
                       SizedBox(
@@ -146,23 +148,24 @@ class IHaveSeenScreen extends StatelessWidget {
                         "Race".tr,
                         style: kSize16W500ColorBlack,
                       ),
-                      GetBuilder<HomeController>(builder: (context) {
+                      GetBuilder<IHaveFoundSomeoneController>(
+                          builder: (context) {
                         return CustomTextField(
                           backgroundColor: white,
                           height: getHeight(48),
                           text: "Enter the person race",
                           length: 100,
-                          controller: homeController.controller5,
+                          controller: homeController.controller4,
                           keyboardType: TextInputType.emailAddress,
                           autovalidateMode:
-                          homeController.controller5.text.isNotEmpty
-                              ? AutovalidateMode.onUserInteraction
-                              : AutovalidateMode.disabled,
+                              homeController.controller4.text.isNotEmpty
+                                  ? AutovalidateMode.onUserInteraction
+                                  : AutovalidateMode.disabled,
                           onChanged: (value) {
                             homeController.update();
                           },
                           inputFormatters:
-                          FilteringTextInputFormatter.singleLineFormatter,
+                              FilteringTextInputFormatter.singleLineFormatter,
                         );
                       }),
                       SizedBox(
@@ -172,7 +175,8 @@ class IHaveSeenScreen extends StatelessWidget {
                         "Hair Color".tr,
                         style: kSize16W500ColorBlack,
                       ),
-                      GetBuilder<HomeController>(builder: (context) {
+                      GetBuilder<IHaveFoundSomeoneController>(
+                          builder: (context) {
                         return CustomTextField(
                           backgroundColor: white,
                           height: getHeight(48),
@@ -181,14 +185,14 @@ class IHaveSeenScreen extends StatelessWidget {
                           controller: homeController.controller5,
                           keyboardType: TextInputType.emailAddress,
                           autovalidateMode:
-                          homeController.controller5.text.isNotEmpty
-                              ? AutovalidateMode.onUserInteraction
-                              : AutovalidateMode.disabled,
+                              homeController.controller5.text.isNotEmpty
+                                  ? AutovalidateMode.onUserInteraction
+                                  : AutovalidateMode.disabled,
                           onChanged: (value) {
                             homeController.update();
                           },
                           inputFormatters:
-                          FilteringTextInputFormatter.singleLineFormatter,
+                              FilteringTextInputFormatter.singleLineFormatter,
                         );
                       }),
                       SizedBox(
@@ -198,23 +202,24 @@ class IHaveSeenScreen extends StatelessWidget {
                         "Identifying Characteristics".tr,
                         style: kSize16W500ColorBlack,
                       ),
-                      GetBuilder<HomeController>(builder: (context) {
+                      GetBuilder<IHaveFoundSomeoneController>(
+                          builder: (context) {
                         return CustomTextField(
                           backgroundColor: white,
                           height: getHeight(48),
                           text: "Identifying Characteristics",
                           length: 100,
-                          controller: homeController.controller5,
+                          controller: homeController.controller6,
                           keyboardType: TextInputType.emailAddress,
                           autovalidateMode:
-                          homeController.controller5.text.isNotEmpty
-                              ? AutovalidateMode.onUserInteraction
-                              : AutovalidateMode.disabled,
+                              homeController.controller6.text.isNotEmpty
+                                  ? AutovalidateMode.onUserInteraction
+                                  : AutovalidateMode.disabled,
                           onChanged: (value) {
                             homeController.update();
                           },
                           inputFormatters:
-                          FilteringTextInputFormatter.singleLineFormatter,
+                              FilteringTextInputFormatter.singleLineFormatter,
                         );
                       }),
                       SizedBox(
@@ -229,56 +234,50 @@ class IHaveSeenScreen extends StatelessWidget {
                       ),
                       GetBuilder<GeneralController>(builder: (context) {
                         return StatefulBuilder(
-                          builder: (BuildContext context, StateSetter setState) {
+                          builder:
+                              (BuildContext context, StateSetter setState) {
                             return Get.find<GeneralController>().image == null
-                                ? Row(
-                              children: [
-                                SizedBox(
-                                  width: getWidth(150),
-                                  child: RadioListTile(
-                                    value: 0,
-                                    groupValue: _selectedRadio,
-                                    title: Text("No"),
-                                    onChanged: (int? value) {
-                                      setState(() {
-                                        _selectedRadio = value!;
-                                      });
+                                ? GestureDetector(
+                                    onTap: () {
+                                      bottomSheet(
+                                          context,
+                                          Platform.isAndroid
+                                              ? Permission.storage
+                                              : Permission.photos);
                                     },
-                                  ),
-                                ),
-                                SizedBox(
-                                  width: getWidth(150),
-                                  child: RadioListTile(
-                                    value: 1,
-                                    groupValue: _selectedRadio,
-                                    title: Text("Yes"),
-                                    onChanged: (int? value) {
-                                      setState(() {
-                                        _selectedRadio = value!;
-                                        Get.find<GeneralController>()
-                                            .bottomSheet(context);
-                                      });
-                                    },
-                                  ),
-                                ),
-                              ],
-                            )
+                                    child: Container(
+                                      height: getHeight(150),
+                                      width: getWidth(100),
+                                      decoration: BoxDecoration(
+                                          border: Border.all(
+                                              color: black.withOpacity(0.5)),
+                                          borderRadius:
+                                              BorderRadius.circular(15)),
+                                      child: Center(
+                                        child: Icon(
+                                          Icons.add,
+                                          color: black.withOpacity(0.3),
+                                          size: 50,
+                                        ),
+                                      ),
+                                    ),
+                                  )
                                 : Image.file(
                               Get.find<GeneralController>().imageFile!,
-                              height: getHeight(100),
-                              width: getWidth(100),
-                              frameBuilder: (BuildContext context,
-                                  Widget child,
-                                  int? frame,
-                                  bool? wasSynchronouslyLoaded) {
-                                return Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: child,
-                                );
-                              },
-                              errorBuilder: (context, e, stackTrace) =>
-                                  Image.asset(error_image),
-                            );
+                                    height: getHeight(100),
+                                    width: getWidth(100),
+                                    frameBuilder: (BuildContext context,
+                                        Widget child,
+                                        int? frame,
+                                        bool? wasSynchronouslyLoaded) {
+                                      return Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: child,
+                                      );
+                                    },
+                                    errorBuilder: (context, e, stackTrace) =>
+                                        Image.asset(error_image),
+                                  );
                             // : FadeInImage.assetNetwork(
                             //     height: getHeight(100),
                             //     width: getWidth(100),
@@ -304,7 +303,12 @@ class IHaveSeenScreen extends StatelessWidget {
                 ),
                 GestureDetector(
                   onTap: () {
-                    // homeController.setGunPin();
+
+
+                    Get.find<GeneralController>().image == null
+                        ? CustomToast.failToast(
+                            msg: "Please add picture first".tr)
+                        : homeController.ihavefoundPin();
                   },
                   child: Material(
                     elevation: 2,

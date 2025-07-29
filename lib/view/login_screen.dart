@@ -1,12 +1,14 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
+// import 'package:get/get_core/src/get_main.dart';
 import 'package:loved_app/view/sign_in_screen.dart';
 
 import '../controllers/auth_controller.dart';
 import '../utils/colors.dart';
-import '../utils/images.dart';
+// import '../utils/images.dart';
 import '../utils/size_config.dart';
 import '../utils/text_styles.dart';
 import '../widgets/custom_password_textfeild.dart';
@@ -79,7 +81,7 @@ class LoginScreen extends StatelessWidget {
                       height: getHeight(12),
                     ),
                     Text(
-                      "sign9".tr.toString().toUpperCase(),
+                      "Password".tr.toString().toUpperCase(),
                       style: kSize18W700ColorWhite,
                     ),
                     SizedBox(

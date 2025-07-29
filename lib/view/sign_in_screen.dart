@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:loved_app/view/login_screen.dart';
+import 'package:loved_app/widgets/custom_toasts.dart';
 
 import '../controllers/auth_controller.dart';
 import '../utils/colors.dart';
@@ -43,7 +44,7 @@ class SignInScreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     SizedBox(
-                      height: getHeight(200),
+                      height: getHeight(170),
                     ),
                     Text(
                       "sign1".tr.toString().toUpperCase(),
@@ -60,15 +61,11 @@ class SignInScreen extends StatelessWidget {
                         length: 30,
                         controller: authController.nameController,
                         keyboardType: TextInputType.emailAddress,
-                        autovalidateMode:
-                            authController.nameController.text.isNotEmpty
-                                ? AutovalidateMode.onUserInteraction
-                                : AutovalidateMode.disabled,
+                        autovalidateMode: authController.nameController.text.isNotEmpty ? AutovalidateMode.onUserInteraction : AutovalidateMode.disabled,
                         onChanged: (value) {
                           authController.update();
                         },
-                        inputFormatters:
-                            FilteringTextInputFormatter.singleLineFormatter,
+                        inputFormatters: FilteringTextInputFormatter.singleLineFormatter,
                         // FilteringTextInputFormatter.deny(RegExp('[ ]')),
                       );
                     }),
@@ -90,15 +87,11 @@ class SignInScreen extends StatelessWidget {
                         length: 30,
                         controller: authController.emailController,
                         keyboardType: TextInputType.emailAddress,
-                        autovalidateMode:
-                            authController.emailController.text.isNotEmpty
-                                ? AutovalidateMode.onUserInteraction
-                                : AutovalidateMode.disabled,
+                        autovalidateMode: authController.emailController.text.isNotEmpty ? AutovalidateMode.onUserInteraction : AutovalidateMode.disabled,
                         onChanged: (value) {
                           authController.update();
                         },
-                        inputFormatters:
-                            FilteringTextInputFormatter.deny(RegExp('[ ]')),
+                        inputFormatters: FilteringTextInputFormatter.deny(RegExp('[ ]')),
                       );
                     }),
                     SizedBox(
@@ -132,15 +125,11 @@ class SignInScreen extends StatelessWidget {
                         length: 30,
                         controller: authController.locationController,
                         keyboardType: TextInputType.emailAddress,
-                        autovalidateMode:
-                            authController.locationController.text.isNotEmpty
-                                ? AutovalidateMode.onUserInteraction
-                                : AutovalidateMode.disabled,
+                        autovalidateMode: authController.locationController.text.isNotEmpty ? AutovalidateMode.onUserInteraction : AutovalidateMode.disabled,
                         onChanged: (value) {
                           authController.update();
                         },
-                        inputFormatters:
-                            FilteringTextInputFormatter.singleLineFormatter,
+                        inputFormatters: FilteringTextInputFormatter.singleLineFormatter,
                       );
                     }),
                     SizedBox(
@@ -161,15 +150,11 @@ class SignInScreen extends StatelessWidget {
                         length: 30,
                         controller: authController.phoneController,
                         keyboardType: TextInputType.emailAddress,
-                        autovalidateMode:
-                            authController.phoneController.text.isNotEmpty
-                                ? AutovalidateMode.onUserInteraction
-                                : AutovalidateMode.disabled,
+                        autovalidateMode: authController.phoneController.text.isNotEmpty ? AutovalidateMode.onUserInteraction : AutovalidateMode.disabled,
                         onChanged: (value) {
                           authController.update();
                         },
-                        inputFormatters:
-                            FilteringTextInputFormatter.deny(RegExp('[ ]')),
+                        inputFormatters: FilteringTextInputFormatter.deny(RegExp('[ ]')),
                       );
                     }),
                     SizedBox(
@@ -192,15 +177,11 @@ class SignInScreen extends StatelessWidget {
                         length: 30,
                         controller: authController.passwordController,
                         keyboardType: TextInputType.emailAddress,
-                        autovalidateMode:
-                            authController.passwordController.text.isNotEmpty
-                                ? AutovalidateMode.onUserInteraction
-                                : AutovalidateMode.disabled,
+                        autovalidateMode: authController.passwordController.text.isNotEmpty ? AutovalidateMode.onUserInteraction : AutovalidateMode.disabled,
                         onChanged: (value) {
                           authController.update();
                         },
-                        inputFormatters:
-                            FilteringTextInputFormatter.deny(RegExp('[ ]')),
+                        inputFormatters: FilteringTextInputFormatter.deny(RegExp('[ ]')),
                       );
                     }),
                     SizedBox(
@@ -208,28 +189,36 @@ class SignInScreen extends StatelessWidget {
                     ),
                     GestureDetector(
                       onTap: () {
-                        if (authController.signupFormKey.currentState!
-                            .validate()) {
+                        if (authController.nameController.text.isEmpty) {
+                          CustomToast.failToast(msg: 'Please Enter Your Name');
+                        } else if (authController.emailController.text.isEmpty) {
+                          CustomToast.failToast(msg: 'Please Enter Your Email');
+                        } else if (authController.locationController.text.isEmpty) {
+                          CustomToast.failToast(msg: 'Please Enter Your Location');
+                        } else if (authController.passwordController.text.isEmpty) {
+                          CustomToast.failToast(msg: 'Please Enter Your Password');
+                        } else {
                           authController.createUserFunc();
                         }
                       },
                       child: Center(
-                        child: Text("sign5".tr.toString().toUpperCase(),
-                            style: kSize28W700ColorWhite),
+                        child: Text("sign5".tr.toString().toUpperCase(), style: kSize28W700ColorWhite),
                       ),
                     ),
                     SizedBox(
                       height: getHeight(80),
                     ),
                     GestureDetector(
-                      onTap: (){
-                        Get.off(()=>LoginScreen());
+                      onTap: () {
+                        Get.off(() => LoginScreen());
                       },
-                      child: RichText(text: TextSpan(text: "Already have an account? ",style: kSize18W700ColorWhite,children: [
-                        TextSpan(text: "Login Now!",style: kSize18W700ColorWhite.copyWith(decoration: TextDecoration.underline))
-                      ]),),
+                      child: RichText(
+                        text: TextSpan(
+                            text: "Already have an account? ",
+                            style: kSize18W700ColorWhite,
+                            children: [TextSpan(text: "Login Now!", style: kSize18W700ColorWhite.copyWith(decoration: TextDecoration.underline))]),
+                      ),
                     ),
-
                   ],
                 ),
               ),

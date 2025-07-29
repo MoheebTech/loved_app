@@ -1,10 +1,15 @@
+import 'dart:io';
+import 'package:permission_handler/permission_handler.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:loved_app/utils/size_config.dart';
 import 'package:get/get.dart';
+import 'package:loved_app/widgets/custom_toasts.dart';
 
 import '../controllers/general_controller.dart';
 import '../controllers/home_controller.dart';
+import '../data/permissions.dart';
 import '../utils/colors.dart';
 import '../utils/images.dart';
 import '../utils/text_styles.dart';
@@ -20,27 +25,24 @@ class IAmLookingScreen extends StatelessWidget {
     int _selectedRadio = 0;
 
     return GestureDetector(
-      onTap: (){
+      onTap: () {
         FocusScope.of(context).unfocus();
       },
       child: Scaffold(
         appBar: AppBar(
-          elevation: 0,
-          title: Text("I am looking for someone"),
-          centerTitle: true,
-          flexibleSpace: Container(
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                stops: [0.1,1.0],
-                colors: [primaryColor.withOpacity(0.6), blue],
-                begin: Alignment.centerRight,
-                end: Alignment.centerLeft,
+            elevation: 0,
+            title: Text("I am looking for someone"),
+            centerTitle: true,
+            flexibleSpace: Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  stops: [0.1, 1.0],
+                  colors: [primaryColor.withOpacity(0.6), blue],
+                  begin: Alignment.centerRight,
+                  end: Alignment.centerLeft,
+                ),
               ),
-            ),
-
-          )
-
-        ),
+            )),
         body: SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 15.0),
@@ -49,7 +51,6 @@ class IAmLookingScreen extends StatelessWidget {
                 SizedBox(
                   height: getHeight(50),
                 ),
-
                 Container(
                   padding: EdgeInsets.symmetric(
                       horizontal: getWidth(10), vertical: getHeight(20)),
@@ -250,46 +251,35 @@ class IAmLookingScreen extends StatelessWidget {
                         style: kSize16W500ColorBlack,
                       ),
                       SizedBox(
-                        height: getHeight(8),
+                        height: getHeight(20),
                       ),
                       GetBuilder<GeneralController>(builder: (context) {
                         return StatefulBuilder(
-                          builder: (BuildContext context, StateSetter setState) {
+                          builder:
+                              (BuildContext context, StateSetter setState) {
                             return Get.find<GeneralController>().image == null
-                                ? Row(
-                                    children: [
-                                      SizedBox(
-                                        width: getWidth(150),
-                                        child: RadioListTile(
-                                          value: 0,
-                                          groupValue: _selectedRadio,
-                                          title: Text("No"),
-                                          onChanged: (int? value) {
-                                            setState(() {
-                                              _selectedRadio = value!;
-                                            });
-                                          },
+                                ? GestureDetector(
+                                    onTap: () {
+                                      bottomSheet(context,Platform.isAndroid ? Permission.storage : Permission.photos);
+                                    },
+                                    child: Container(
+                                      height: getHeight(150),
+                                      width: getWidth(100),
+                                      decoration: BoxDecoration(
+                                          border: Border.all(color: black.withOpacity(0.5)),
+                                          borderRadius:
+                                              BorderRadius.circular(15)),
+                                      child:  Center(
+                                        child: Icon(
+                                          Icons.add,
+                                          color: black.withOpacity(0.3),
+                                          size: 50,
                                         ),
                                       ),
-                                      SizedBox(
-                                        width: getWidth(150),
-                                        child: RadioListTile(
-                                          value: 1,
-                                          groupValue: _selectedRadio,
-                                          title: Text("Yes"),
-                                          onChanged: (int? value) {
-                                            setState(() {
-                                              _selectedRadio = value!;
-                                              Get.find<GeneralController>()
-                                                  .bottomSheet(context);
-                                            });
-                                          },
-                                        ),
-                                      ),
-                                    ],
+                                    ),
                                   )
                                 : Image.file(
-                                    Get.find<GeneralController>().imageFile!,
+                              Get.find<GeneralController>().imageFile!,
                                     height: getHeight(100),
                                     width: getWidth(100),
                                     frameBuilder: (BuildContext context,
@@ -304,17 +294,7 @@ class IAmLookingScreen extends StatelessWidget {
                                     errorBuilder: (context, e, stackTrace) =>
                                         Image.asset(error_image),
                                   );
-                            // : FadeInImage.assetNetwork(
-                            //     height: getHeight(100),
-                            //     width: getWidth(100),
-                            //
-                            //     placeholder: loading_pic,
-                            //     image:
-                            //         "${Get.find<GeneralController>().image}",
-                            //     fit: BoxFit.cover,
-                            //     imageErrorBuilder: (context, e, stackTrace) =>
-                            //         Image.asset(error_image),
-                            //   );
+
                           },
                         );
                       }),
@@ -329,9 +309,9 @@ class IAmLookingScreen extends StatelessWidget {
                 ),
                 GestureDetector(
                   onTap: () {
-                    Get.find<GeneralController>().image == null?
-                    homeController.setPostPin():
-                    homeController.setPostPinWithPic();
+                    Get.find<GeneralController>().image == null
+                        ? CustomToast.failToast(msg: "Please add picture first".tr)
+                        : homeController.iAmLookingPin();
                   },
                   child: Material(
                     elevation: 2,

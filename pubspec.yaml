@@ -51,6 +51,14 @@ dev_dependencies:
   image_picker:
   flutter_image_compress:
   shimmer:
+  location:
+  geolocator:
+  cached_network_image:
+  syncfusion_flutter_maps:
+  flutter_local_notifications: ^17.1.2
+  firebase_messaging:
+  intl:
+
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
