@@ -54,7 +54,7 @@ class AuthController extends GetxController {
         //   "status": "Online",
         // });
         await getCurrentLocation();
-        await FirebaseNotifications().getDeviceToken();
+        // await FirebaseNotifications().getDeviceToken();
 
         Get.to(() => const DashBoardScreen());
 
@@ -96,7 +96,7 @@ class AuthController extends GetxController {
         //     .set({
         //   "status": "Online",
         // });
-        await FirebaseNotifications().getDeviceToken();
+        // await FirebaseNotifications().getDeviceToken();
 
         Get.to(() => const DashBoardScreen());
         nameController.clear();

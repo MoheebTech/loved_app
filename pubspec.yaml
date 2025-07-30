@@ -54,8 +54,9 @@ dev_dependencies:
   location:
   geolocator:
   cached_network_image:
+  url_launcher:
   syncfusion_flutter_maps: ^27.1.52
-  flutter_local_notifications:
+  # flutter_local_notifications: ^17.1.2
   firebase_messaging:
   intl:
 

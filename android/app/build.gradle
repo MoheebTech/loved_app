@@ -1,6 +1,7 @@
 plugins {
     id "com.android.application"
     id "kotlin-android"
+    id 'org.jetbrains.kotlin.android'
     id "dev.flutter.flutter-gradle-plugin"
     id 'com.google.gms.google-services'
 }
@@ -24,8 +25,8 @@ if (flutterVersionName == null) {
 }
 
 android {
-    namespace "com.flutter.loved_app"
-    compileSdkVersion 34
+    namespace "com.arure.lovedApp"
+    compileSdkVersion 35
     ndkVersion flutter.ndkVersion
 
     compileOptions {
@@ -43,22 +44,38 @@ android {
 
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId "com.flutter.loved_app"
+        applicationId "com.arure.lovedApp"
         // You can update the following values to match your application needs.
         // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-gradle-build-configuration.
         minSdkVersion 23
-        targetSdkVersion 34
+        targetSdkVersion 35
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
+    }
+    signingConfigs {
+        release {
+            keyAlias = project.hasProperty("keyAlias") ? project.keyAlias : "lovedapp"
+            keyPassword = project.hasProperty("keyPassword") ? project.keyPassword : "love2025"
+            storeFile = file(project.hasProperty("storeFile") ? project.storeFile : "lovedapp_key.jks")
+            storePassword = project.hasProperty("storePassword") ? project.storePassword : "love2025"
+        }
     }
 
     buildTypes {
         release {
-            // TODO: Add your own signing config for the release build.
-            // Signing with the debug keys for now, so `flutter run --release` works.
-            signingConfig signingConfigs.debug
+            signingConfig signingConfigs.release
+            minifyEnabled false
+            shrinkResources false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+    // buildTypes {
+    //     release {
+    //         // TODO: Add your own signing config for the release build.
+    //         // Signing with the debug keys for now, so `flutter run --release` works.
+    //         signingConfig signingConfigs.debug
+    //     }
+    // }
 }
 
 flutter {

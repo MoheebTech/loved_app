@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:loved_app/utils/custom_url_louncher.dart';
 import 'package:loved_app/view/login_screen.dart';
 import 'package:loved_app/view/profile_screen.dart';
 import '../controllers/general_controller.dart';
@@ -50,7 +51,7 @@ class DrawerScreen extends StatelessWidget {
                 'Profile',
               ),
               onTap: () {
-                Get.to(()=>ProfileScreen(),transition: Transition.noTransition);
+                Get.to(() => ProfileScreen(), transition: Transition.noTransition);
               },
               trailing: const Icon(
                 Icons.arrow_forward_ios,
@@ -63,36 +64,39 @@ class DrawerScreen extends StatelessWidget {
             SizedBox(
               height: getHeight(12),
             ),
-            // ListTile(
-            //   title: const Text(
-            //     'Privacy Policy',
-            //   ),
-            //   onTap: () {},
-            //   trailing: const Icon(
-            //     Icons.arrow_forward_ios,
-            //     color: Color(0xFF303030),
-            //     size: 20,
-            //   ),
-            //   // tileColor: Color(0xFFF5F5F5),
-            //   dense: false,
-            // ),
-            // SizedBox(
-            //   height: getHeight(12),
-            // ),
-            // ListTile(
-            //   title: const Text(
-            //     'Terms and Conditions',
-            //   ),
-            //   onTap: () {},
-            //   trailing: const Icon(
-            //     Icons.arrow_forward_ios,
-            //     color: Color(0xFF303030),
-            //     size: 20,
-            //   ),
-            //   // tileColor: Color(0xFFF5F5F5),
-            //   dense: false,
-            // ),
-
+            ListTile(
+              title: const Text(
+                'Privacy Policy',
+              ),
+              onTap: () {
+                CustomUrlLaunchers().openUrl(context, "https://lovedapp.arure.xyz/privacy-policy.html");
+              },
+              trailing: const Icon(
+                Icons.arrow_forward_ios,
+                color: Color(0xFF303030),
+                size: 20,
+              ),
+              // tileColor: Color(0xFFF5F5F5),
+              dense: false,
+            ),
+            SizedBox(
+              height: getHeight(12),
+            ),
+            ListTile(
+              title: const Text(
+                'Terms and Conditions',
+              ),
+              onTap: () {
+                CustomUrlLaunchers().openUrl(context, "https://lovedapp.arure.xyz/terms-and-conditions.html");
+              },
+              trailing: const Icon(
+                Icons.arrow_forward_ios,
+                color: Color(0xFF303030),
+                size: 20,
+              ),
+              // tileColor: Color(0xFFF5F5F5),
+              dense: false,
+            ),
             ListTile(
               title: InkWell(
                 onTap: () {
@@ -103,13 +107,10 @@ class DrawerScreen extends StatelessWidget {
                       builder: (BuildContext context) {
                         return Dialog(
                           child: Container(
-
                               height: getHeight(220),
                               width: getWidth(374),
                               // padding: EdgeInsets.all(12),
-                              decoration: BoxDecoration(
-                                  color: white,
-                                  borderRadius: BorderRadius.circular(8)),
+                              decoration: BoxDecoration(color: white, borderRadius: BorderRadius.circular(8)),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
@@ -118,8 +119,7 @@ class DrawerScreen extends StatelessWidget {
                                   ),
                                   Text(
                                     "Logout Account".tr,
-                                    style: kSize24W500ColorWhite.copyWith(
-                                        color: black),
+                                    style: kSize24W500ColorWhite.copyWith(color: black),
                                   ),
                                   SizedBox(
                                     height: getHeight(20),
@@ -133,8 +133,7 @@ class DrawerScreen extends StatelessWidget {
                                     height: getHeight(40),
                                   ),
                                   Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceEvenly,
+                                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                     children: [
                                       CustomButton(
                                         width: getWidth(145),
@@ -151,9 +150,7 @@ class DrawerScreen extends StatelessWidget {
                                         text: "Logout".tr,
                                         onPressed: () {
                                           FirebaseAuth.instance.signOut();
-                                          Get.find<GeneralController>()
-                                              .lovedBox
-                                              .put(cUserSession, false);
+                                          Get.find<GeneralController>().lovedBox.put(cUserSession, false);
 
                                           Get.offAll(
                                             () => LoginScreen(),
@@ -194,9 +191,7 @@ class DrawerScreen extends StatelessWidget {
                               height: getHeight(210),
                               width: getWidth(374),
                               // padding: EdgeInsets.only(left: getWidth(12)),
-                              decoration: BoxDecoration(
-                                  color: white,
-                                  borderRadius: BorderRadius.circular(8)),
+                              decoration: BoxDecoration(color: white, borderRadius: BorderRadius.circular(8)),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
@@ -205,14 +200,13 @@ class DrawerScreen extends StatelessWidget {
                                   ),
                                   Text(
                                     "Delete Account".tr,
-                                    style: kSize24W500ColorWhite.copyWith(
-                                        color: black),
+                                    style: kSize24W500ColorWhite.copyWith(color: black),
                                   ),
                                   SizedBox(
                                     height: getHeight(10),
                                   ),
                                   Padding(
-                                    padding: const EdgeInsets.symmetric(horizontal:8.0),
+                                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
                                     child: Text(
                                       "Are you sure you want to delete account?".tr,
                                       style: kSize16W400ColorBlack,
@@ -223,8 +217,7 @@ class DrawerScreen extends StatelessWidget {
                                     height: getHeight(20),
                                   ),
                                   Row(
-                                    mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
+                                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                     children: [
                                       CustomButton(
                                         width: getWidth(145),
@@ -241,8 +234,7 @@ class DrawerScreen extends StatelessWidget {
                                         text: "Delete".tr,
                                         onPressed: () {
                                           // Get the current user.
-                                          User? user =
-                                              FirebaseAuth.instance.currentUser;
+                                          User? user = FirebaseAuth.instance.currentUser;
 
                                           // Check if the user is signed in.
                                           if (user != null) {
@@ -251,8 +243,7 @@ class DrawerScreen extends StatelessWidget {
                                               Get.offAll(() => LoginScreen());
                                               print('Account deleted');
                                             }).catchError((error) {
-                                              print(
-                                                  'Error deleting account: $error');
+                                              print('Error deleting account: $error');
                                             });
                                           } else {
                                             print('User is not signed in');
